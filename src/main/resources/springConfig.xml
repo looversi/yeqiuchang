@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<context:annotation-config/>
+	<!-- 自动扫描注入 -->
+	<context:component-scan base-package="cn.com.yeqiuchang">
+		<!-- spring容器不扫描@Controller的注解 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	<!-- 开启扫描AOP注解 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!-- 加载数据库配置文件 -->
+	<context:property-placeholder location="classpath:db.properties
+		"/>
+	
+	
+	
+	
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${dataSource.driver}"/>
+		<property name="jdbcUrl" value="${dataSource.url}"/>
+		<property name="user" value="${dataSource.userName}"/>
+		<property name="password" value="${dataSource.password}"/>
+		<property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="3"/>
+        <!--关闭连接后不自动commit-->
+        <property name="autoCommitOnClose" value="false"/>
+        <!--获取连接超时时间-->
+        <property name="checkoutTimeout" value="10000"/>
+        <!--获取连接重试次数-->
+        <property name="acquireRetryAttempts" value="3"/>
+	</bean>
+	<!-- 配置sqlSessionFactory对象 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 指定数据源 -->
+		<property name="dataSource" ref="dataSource"/>
+		<property name="typeAliasesPackage" value="cn.com.yeqiuchang.domain"/>
+		<!-- 自动扫描map.xml文件 -->
+		<property name="mapperLocations" value="classpath:cn/com/yeqiuchang/mapper/*.xml"></property>
+			<!-- <array>
+				<value>classpath:yzl/resource/map/*.xml</value>
+			</array> -->
+		
+	</bean>
+	<!-- 自动扫描dao层 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="cn.com.yeqiuchang.dao"/>
+  
+   <!-- <property name="annotationClass" value="XXX"/> -->
+   
+	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+</bean>
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<!-- 启用支持annotation注解方式进行事务管理 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+</beans>
