@@ -1,8 +1,15 @@
 package cn.com.yeqiuchang.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
 public class Test {
 	private int id;
-	public static void main(String[] args){
-		
+	
+	@RequestMapping(value="/send", method=RequestMethod.DELETE)
+	public String send(){
+		return null;
 	}
 }
