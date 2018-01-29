@@ -4,6 +4,9 @@
 <html>
 <body>
 <h2>Hello World!</h2>
-<a href="/yeqiuchang/api/article/1/1">测试</a>
+<p>${requestScope.message }</p>
+<p>${requestScope.article.id }</p>
+<p>${requestScope.article.title }</p>
+
 </body>
 </html>

@@ -8,11 +8,11 @@
 	
 	<resultMap type="cn.com.yeqiuchang.domain.Article" id="articleMapper">
 		<id		property="id" 					column="id"/>
-		<result property="title" 			column="title"/>
-		<result property="author"			column="author"/>
-		<result property="content"		column="content"/>
-		<result property="date"			column="date"/>
-		<result property="foot"				column="foot"/>
+		<result property="title" 				column="title"/>
+		<result property="author"				column="author"/>
+		<result property="content"				column="content"/>
+		<result property="date"					column="date"/>
+		<result property="foot"					column="foot"/>
 		
 	</resultMap>
 

@@ -7,7 +7,7 @@ import cn.com.yeqiuchang.dao.IArticleMapper;
 import cn.com.yeqiuchang.domain.Article;
 import cn.com.yeqiuchang.service.IService.IArticleService;
 
-@Service
+@Service("articleService")
 public class ArticleService implements IArticleService{
 	@Autowired
 	private IArticleMapper iArticleMapper;
